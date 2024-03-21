@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * A concrete implementation of the PaymentStrategy interface for processing credit card payments.
  * This class is annotated with @Service to indicate that it is a Spring service component.
  */
-@Service("CREDIT_CARD")
+@Service
 public class CreditCardPaymentStrategy implements PaymentStrategy {
 
     /**
@@ -25,5 +25,10 @@ public class CreditCardPaymentStrategy implements PaymentStrategy {
                 .amount(amount)
                 .paymentMethod(PaymentMethodEnum.CREDIT_CARD)
                 .build();
+    }
+
+    @Override
+    public PaymentMethodEnum getType() {
+        return PaymentMethodEnum.CREDIT_CARD;
     }
 }

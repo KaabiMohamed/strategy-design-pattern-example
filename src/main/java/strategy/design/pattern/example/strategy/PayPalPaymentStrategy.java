@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * A concrete implementation of the PaymentStrategy interface for processing PayPal payments.
  * This class is annotated with @Service to indicate that it is a Spring service component.
  */
-@Service("PAYPAL")
+@Service
 public class PayPalPaymentStrategy implements PaymentStrategy {
 
     /**
@@ -25,5 +25,10 @@ public class PayPalPaymentStrategy implements PaymentStrategy {
                 .amount(amount)
                 .paymentMethod(PaymentMethodEnum.PAYPAL)
                 .build();
+    }
+
+    @Override
+    public PaymentMethodEnum getType() {
+        return PaymentMethodEnum.PAYPAL;
     }
 }

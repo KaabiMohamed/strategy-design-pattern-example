@@ -1,10 +1,13 @@
 package strategy.design.pattern.example.factory;
 
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Component;
 import strategy.design.pattern.example.model.Receipt;
+import strategy.design.pattern.example.model.enums.PaymentMethodEnum;
 import strategy.design.pattern.example.strategy.PaymentStrategy;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -14,18 +17,19 @@ import java.util.Objects;
  */
 @Component
 public class PaymentFactory {
-    private final Map<String, PaymentStrategy> paymentStrategies;
+    private final Map<PaymentMethodEnum, PaymentStrategy> paymentStrategies = new HashMap<>();
 
     /**
      * Constructs a PaymentFactory with the provided payment strategies.
      *
-     * @param paymentStrategies A map of payment method names to PaymentStrategy implementations.
+     * @param listableBeanFactory A map of payment method names to PaymentStrategy implementations.
      */
-    public PaymentFactory(Map<String, PaymentStrategy> paymentStrategies) {
-        this.paymentStrategies = paymentStrategies;
+    public PaymentFactory(ListableBeanFactory listableBeanFactory) {
+        listableBeanFactory.getBeansOfType(PaymentStrategy.class)
+                .values().forEach(service -> paymentStrategies.put(service.getType(),service));
     }
 
-    private PaymentStrategy getStrategy(String paymentMethod) {
+    private PaymentStrategy getStrategy(PaymentMethodEnum paymentMethod) {
         PaymentStrategy paymentStrategy = paymentStrategies.get(paymentMethod);
         if (Objects.isNull(paymentStrategy))
             throw new UnsupportedOperationException(String.format("Invalid Payment Method %s", paymentMethod));
@@ -40,7 +44,7 @@ public class PaymentFactory {
      * @return A Receipt object representing the payment transaction.
      * @throws UnsupportedOperationException if the specified payment method is not supported.
      */
-    public Receipt proceedPayment(String paymentMethod, BigDecimal amount) {
+    public Receipt proceedPayment(PaymentMethodEnum paymentMethod, BigDecimal amount) {
         return getStrategy(paymentMethod).pay(amount);
     }
 }

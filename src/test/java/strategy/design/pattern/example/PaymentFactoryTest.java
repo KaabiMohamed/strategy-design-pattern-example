@@ -26,9 +26,9 @@ public class PaymentFactoryTest {
     void givenPaypalPaymentMethod_whenProceedPayment_thenSuccess() {
         PaymentMethodEnum paymentMethod = PaymentMethodEnum.PAYPAL;
         BigDecimal amount = new BigDecimal(100);
-        Receipt response = paymentFactory.proceedPayment(paymentMethod.label, amount);
+        Receipt response = paymentFactory.proceedPayment(paymentMethod, amount);
         Assertions.assertEquals(paymentMethod, response.getPaymentMethod());
-        Assertions.assertTrue(amount.equals(response.getAmount()));
+        Assertions.assertEquals(amount, response.getAmount());
     }
 
     /**
@@ -38,9 +38,9 @@ public class PaymentFactoryTest {
     void givenCreditCardPaymentMethod_whenProceedPayment_thenSuccess() {
         PaymentMethodEnum paymentMethod = PaymentMethodEnum.CREDIT_CARD;
         BigDecimal amount = new BigDecimal(200);
-        Receipt response = paymentFactory.proceedPayment(paymentMethod.label, amount);
+        Receipt response = paymentFactory.proceedPayment(paymentMethod, amount);
         Assertions.assertEquals(paymentMethod, response.getPaymentMethod());
-        Assertions.assertTrue(amount.equals(response.getAmount()));
+        Assertions.assertEquals(amount, response.getAmount());
     }
 
     /**
@@ -51,7 +51,7 @@ public class PaymentFactoryTest {
         PaymentMethodEnum paymentMethod = PaymentMethodEnum.CASH_ON_DELIVERY;
         BigDecimal amount = new BigDecimal(300);
         Assertions.assertThrowsExactly(UnsupportedOperationException.class, () -> {
-            paymentFactory.proceedPayment(paymentMethod.label, amount);
+            paymentFactory.proceedPayment(paymentMethod, amount);
         });
     }
 
@@ -60,7 +60,7 @@ public class PaymentFactoryTest {
      */
     @Test
     void givenUnknownPaymentMethod_whenProceedPayment_thenThrowUnsupportedOperationException() {
-        String unknownPaymentMethod = "RANDOM_TEXT";
+        PaymentMethodEnum unknownPaymentMethod = PaymentMethodEnum.CASH_ON_DELIVERY;
         BigDecimal amount = new BigDecimal(300);
         Assertions.assertThrowsExactly(UnsupportedOperationException.class, () -> {
             paymentFactory.proceedPayment(unknownPaymentMethod, amount);

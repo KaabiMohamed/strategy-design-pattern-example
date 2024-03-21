@@ -7,6 +7,7 @@
 package strategy.design.pattern.example.strategy;
 
 import strategy.design.pattern.example.model.Receipt;
+import strategy.design.pattern.example.model.enums.PaymentMethodEnum;
 
 import java.math.BigDecimal;
 
@@ -19,4 +20,11 @@ public interface PaymentStrategy {
      * @return A Receipt object representing the payment transaction.
      */
     Receipt pay(BigDecimal amount);
+
+    /**
+     * this will return strategy implementation type
+     *
+     * @return PaymentMethodEnum
+     */
+    PaymentMethodEnum getType();
 }
